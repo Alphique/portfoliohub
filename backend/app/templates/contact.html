@@ -1,0 +1,427 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+    /* --- Core Branding Variables (Keep consistent with base.html) --- */
+    :root {
+        --zambia-green: #009639;
+        --zambia-orange: #FF7900;
+        --zambia-red: #CE1126;
+        --zambia-black: #000000;
+        --light-bg: #f8f9fa;
+        --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        --dark-bg: #1a1a1a;
+        --gold: #ffd700;
+        
+        /* New Cluster Color Schemes */
+        --cluster-primary: var(--zambia-green);
+        --cluster-secondary: var(--zambia-orange);
+    }
+    
+    body {
+        background-color: var(--light-bg);
+    }
+
+    /* --- Hero Section & Global Styles (Minimized from previous) --- */
+    .hero-section {
+        background: linear-gradient(135deg, var(--dark-bg) 0%, var(--zambia-green) 100%);
+        padding: 5rem 0 4rem;
+        color: white;
+        border-bottom: 5px solid var(--zambia-orange); 
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+    }
+    
+    .hero-section h1 {
+        font-weight: 900;
+        letter-spacing: 1px;
+    }
+
+    .cluster-section {
+        padding: 3rem 0 2rem;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+    }
+    
+    /* --- Cluster Header Styling (Unified Head and Title) --- */
+    .cluster-box {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        margin-bottom: 2.5rem;
+        overflow: hidden;
+        border: 2px solid var(--cluster-primary); /* Uses theme color */
+    }
+
+    .cluster-title-bar {
+        background-color: var(--cluster-primary);
+        color: white;
+        padding: 1.5rem 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-weight: 700;
+    }
+
+    .cluster-title-bar h2 {
+        font-size: 1.8rem;
+        margin: 0;
+        flex-grow: 1;
+    }
+
+    .cluster-title-bar p {
+        font-size: 1rem;
+        opacity: 0.8;
+        margin: 0;
+        text-align: right;
+    }
+
+    .head-card {
+        padding: 1.5rem;
+        background-color: var(--light-bg);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+        text-align: left;
+    }
+    
+    .head-img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid var(--cluster-secondary); /* Accent color */
+        margin-right: 1.5rem;
+    }
+
+    .head-name {
+        font-weight: 700;
+        font-size: 1.2rem;
+        color: var(--zambia-black);
+        margin-bottom: 0.2rem;
+    }
+
+    .head-role {
+        font-weight: 600;
+        color: var(--zambia-red);
+        font-size: 0.9rem;
+    }
+    
+    .head-contact {
+        margin-left: auto;
+        text-align: right;
+        font-size: 0.9rem;
+    }
+
+    .head-contact a {
+        color: var(--cluster-primary);
+        font-weight: 500;
+        display: block;
+    }
+
+    /* --- Team Member Card Styling (Compact Grid) --- */
+    .role-title {
+        color: var(--zambia-black);
+        font-weight: 700;
+        font-size: 1.3rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 3px solid var(--zambia-red); /* Red underline */
+        display: inline-block;
+    }
+    
+    .team-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        height: 100%;
+        text-align: center;
+        transition: all 0.3s ease;
+        padding: 1rem;
+        border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .team-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .team-name {
+        font-weight: 600;
+        font-size: 1.1rem;
+        margin-top: 0.75rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .team-role {
+        color: var(--cluster-primary);
+        font-weight: 500;
+        font-size: 0.85rem;
+        margin-bottom: 1rem;
+    }
+
+    .team-contact {
+        font-size: 0.8rem;
+        padding-top: 0.5rem;
+        border-top: 1px dashed rgba(0, 0, 0, 0.1);
+    }
+    
+    .team-contact a {
+        color: var(--cluster-primary);
+        font-weight: 500;
+    }
+
+    /* Alternating Theme Class */
+    .cluster-alternate {
+        --cluster-primary: var(--zambia-orange); /* Orange Primary */
+        --cluster-secondary: var(--zambia-green); /* Green Accent */
+        border-color: var(--cluster-primary);
+    }
+
+    .cluster-alternate .head-contact a {
+        color: var(--cluster-primary);
+    }
+    
+    .cluster-alternate .team-role,
+    .cluster-alternate .team-contact a {
+        color: var(--zambia-green);
+    }
+    
+    .cluster-alternate .role-title {
+        border-bottom-color: var(--zambia-green); /* Green underline */
+    }
+
+
+    /* Media Queries for Responsiveness */
+    @media (max-width: 991px) {
+        .cluster-title-bar {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .cluster-title-bar h2 {
+            margin-bottom: 0.5rem;
+        }
+        .cluster-title-bar p {
+            text-align: left;
+        }
+        .head-contact {
+            text-align: left;
+            margin-left: 0;
+            margin-top: 0.5rem;
+        }
+        .head-card {
+            flex-direction: column;
+            text-align: center;
+        }
+        .head-img {
+            margin-right: 0;
+            margin-bottom: 1rem;
+        }
+    }
+    @media (max-width: 576px) {
+        .cluster-title-bar h2 {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content_title %}Our Team{% endblock %}
+{% block content_subtitle %}Connecting you with the experts who drive our portfolio success. Meet the dedicated professionals behind our strategic oversight.{% endblock %}
+
+{% block content %}
+<main class="content-section pt-5">
+    <div class="container">
+        
+        <div class="cluster-section">
+            <div class="cluster-box" style="--cluster-primary: var(--zambia-black); --cluster-secondary: var(--zambia-red);">
+                <div class="cluster-title-bar">
+                    <i class="fas fa-crown fa-2x me-3" style="color: var(--gold);"></i>
+                    <h2>Executive Leadership</h2>
+                    <p class="cluster-subtitle">Strategic oversight and portfolio management</p>
+                </div>
+                
+                <div class="head-card">
+                    <img src="https://via.placeholder.com/150/009639/FFFFFF?text=CPO" alt="Chief Portfolio Officer" class="head-img">
+                    <div>
+                        <p class="head-name">Mr. Siakakaye Siameja</p>
+                        <p class="head-role">Chief Portfolio Officer (CPO)</p>
+                    </div>
+                    <div class="head-contact">
+                        <a href="mailto:siakakaye.siameja@idc.co.zm"><i class="fas fa-envelope me-1"></i>siakakaye.siameja@idc.co.zm</a>
+                        <a href="tel:+260970123456"><i class="fas fa-phone me-1"></i>+260 970 123456</a>
+                    </div>
+                </div>
+                </div>
+        </div>
+
+        
+        <div class="cluster-section">
+            <div class="cluster-box">
+                <div class="cluster-title-bar">
+                    <i class="fas fa-bolt fa-2x me-3"></i>
+                    <h2>Mining & Energy Cluster</h2>
+                    <p class="cluster-subtitle">Overseeing strategic performance in Zambia's key sectors</p>
+                </div>
+                
+                <div class="head-card">
+                    <img src="https://via.placeholder.com/150/CE1126/FFFFFF?text=ME+H" alt="Head of Mining & Energy" class="head-img">
+                    <div>
+                        <p class="head-name">Mr. Saviour Nyangu</p>
+                        <p class="head-role">Head of Mining & Energy Department</p>
+                    </div>
+                    <div class="head-contact">
+                        <a href="mailto:saviour.nyangu@idc.co.zm"><i class="fas fa-envelope me-1"></i>saviour.nyangu@idc.co.zm</a>
+                        <a href="tel:+260970234567"><i class="fas fa-phone me-1"></i>+260 970 234567</a>
+                    </div>
+                </div>
+                
+                <div class="p-4">
+                    <h3 class="role-title">Team Members</h3>
+                    <div class="row g-3">
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="team-card">
+                                <img src="https://via.placeholder.com/70/FF7900/FFFFFF?text=Sr" alt="Senior Officer M&E" class="rounded-circle" style="width:70px; height:70px; object-fit:cover;">
+                                <p class="team-name">Mr. Bwalya Lukonde</p>
+                                <p class="team-role">Senior Officer</p>
+                                <div class="team-contact">
+                                    <a href="mailto:bwalya.lukonde@idc.co.zm">bwalya.lukonde@idc.co.zm</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="team-card">
+                                <img src="https://via.placeholder.com/70/009639/FFFFFF?text=Of" alt="Officer M&E" class="rounded-circle" style="width:70px; height:70px; object-fit:cover;">
+                                <p class="team-name">Ms. Nanhiimbi Sikabanga</p>
+                                <p class="team-role">Officer</p>
+                                <div class="team-contact">
+                                    <a href="mailto:nanhiimbi.sikabanga@idc.co.zm">nanhiimbi.sikabanga@idc.co.zm</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="team-card">
+                                <img src="https://via.placeholder.com/70/000000/FFFFFF?text=Tech" alt="Technical Officer M&E" class="rounded-circle" style="width:70px; height:70px; object-fit:cover;">
+                                <p class="team-name">Robert Kim</p>
+                                <p class="team-role">Technical Officer</p>
+                                <div class="team-contact">
+                                    <a href="mailto:robert.kim@idc.co.zm">robert.kim@idc.co.zm</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="team-card">
+                                <img src="https://via.placeholder.com/70/CE1126/FFFFFF?text=Jr" alt="Junior Analyst M&E" class="rounded-circle" style="width:70px; height:70px; object-fit:cover;">
+                                <p class="team-name">Olivia Park</p>
+                                <p class="team-role">Junior Analyst</p>
+                                <div class="team-contact">
+                                    <a href="mailto:olivia.park@idc.co.zm">olivia.park@idc.co.zm</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        <div class="cluster-section">
+            <div class="cluster-box cluster-alternate">
+                <div class="cluster-title-bar">
+                    <i class="fas fa-plane-departure fa-2x me-3"></i>
+                    <h2>Tourism Infrastructure & Services</h2>
+                    <p class="cluster-subtitle">Developing Zambia's tourism potential through strategic infrastructure</p>
+                </div>
+                
+                <div class="head-card">
+                    <img src="https://via.placeholder.com/150/FF7900/FFFFFF?text=Tour+H" alt="Head of Tourism" class="head-img">
+                    <div>
+                        <p class="head-name">Ms. Lungowe Longwani</p>
+                        <p class="head-role">Head of Tourism Infrastructure & Services</p>
+                    </div>
+                    <div class="head-contact">
+                        <a href="mailto:lungowe.longwani@idc.co.zm"><i class="fas fa-envelope me-1"></i>lungowe.longwani@idc.co.zm</a>
+                        <a href="tel:+260970345678"><i class="fas fa-phone me-1"></i>+260 970 345678</a>
+                    </div>
+                </div>
+                
+                <div class="p-4">
+                    <h3 class="role-title">Team Members</h3>
+                    <div class="row g-3">
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="team-card">
+                                <img src="https://via.placeholder.com/70/009639/FFFFFF?text=Sr" alt="Senior Officer Tourism" class="rounded-circle" style="width:70px; height:70px; object-fit:cover;">
+                                <p class="team-name">Chris Evans</p>
+                                <p class="team-role">Senior Officer</p>
+                                <div class="team-contact">
+                                    <a href="mailto:chris.evans@idc.co.zm">chris.evans@idc.co.zm</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="team-card">
+                                <img src="https://via.placeholder.com/70/CE1126/FFFFFF?text=Of" alt="Officer Tourism" class="rounded-circle" style="width:70px; height:70px; object-fit:cover;">
+                                <p class="team-name">Sophia Miller</p>
+                                <p class="team-role">Officer</p>
+                                <div class="team-contact">
+                                    <a href="mailto:sophia.miller@idc.co.zm">sophia.miller@idc.co.zm</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="team-card">
+                                <img src="https://via.placeholder.com/70/000000/FFFFFF?text=Tech" alt="Technical Officer Tourism" class="rounded-circle" style="width:70px; height:70px; object-fit:cover;">
+                                <p class="team-name">William Davis</p>
+                                <p class="team-role">Technical Officer</p>
+                                <div class="team-contact">
+                                    <a href="mailto:william.davis@idc.co.zm">william.davis@idc.co.zm</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="team-card">
+                                <img src="https://via.placeholder.com/70/FF7900/FFFFFF?text=Jr" alt="Junior Analyst Tourism" class="rounded-circle" style="width:70px; height:70px; object-fit:cover;">
+                                <p class="team-name">Ava Wilson</p>
+                                <p class="team-role">Junior Analyst</p>
+                                <div class="team-contact">
+                                    <a href="mailto:ava.wilson@idc.co.zm">ava.wilson@idc.co.zm</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</main>
+
+<div class="scroll-top" id="scrollTop">
+    <i class="fas fa-chevron-up"></i>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Scroll to top functionality
+    document.getElementById('scrollTop').addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    
+    // Show/hide scroll to top button based on scroll position
+    window.addEventListener('scroll', function() {
+        const scrollTop = document.getElementById('scrollTop');
+        if (window.pageYOffset > 300) {
+            scrollTop.style.opacity = '1';
+            scrollTop.style.visibility = 'visible';
+        } else {
+            scrollTop.style.opacity = '0';
+            scrollTop.style.visibility = 'hidden';
+        }
+    });
+    
+    // Initialize - hide scroll to top button initially
+    document.getElementById('scrollTop').style.opacity = '0';
+    document.getElementById('scrollTop').style.visibility = 'hidden';
+</script>
+{% endblock %}

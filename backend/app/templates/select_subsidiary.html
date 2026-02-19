@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>{{ portfolio.name if portfolio else 'Select Portfolio' }} | Subsidiaries</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+    <style>
+        :root {
+            --zambia-red: #de2010;
+            --zambia-green: #007a33;
+            --zambia-orange: #ff8c00;
+            --zambia-black: #000000;
+            --zambia-white: #ffffff;
+            --zambia-gold: #ffd700;
+        }
+
+        body {
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--zambia-white);
+            min-height: 100vh;
+        }
+
+        .overlay {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            min-height: 100vh;
+            padding: 80px 30px 60px;
+        }
+
+        .form-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Zambian flag-inspired theme borders */
+        .red-theme .overlay {
+            border-left: 12px solid var(--zambia-red);
+            border-right: 12px solid var(--zambia-red);
+            background: rgba(0, 0, 0, 0.75);
+        }
+
+        .green-theme .overlay {
+            border-left: 12px solid var(--zambia-green);
+            border-right: 12px solid var(--zambia-green);
+            background: rgba(0, 0, 0, 0.75);
+        }
+
+        .orange-theme .overlay {
+            border-left: 12px solid var(--zambia-orange);
+            border-right: 12px solid var(--zambia-orange);
+            background: rgba(0, 0, 0, 0.75);
+            color: var(--zambia-black);
+        }
+
+        /* Hero section with Zambian flag colors */
+        .hero-box {
+            background: linear-gradient(135deg, 
+                rgba(222, 32, 16, 0.3) 0%, 
+                rgba(0, 122, 51, 0.3) 33%, 
+                rgba(255, 140, 0, 0.3) 66%, 
+                rgba(0, 0, 0, 0.3) 100%);
+            color: var(--zambia-white);
+            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            padding: 40px 30px;
+            margin-bottom: 40px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, 
+                rgba(222, 32, 16, 0.2) 0%, 
+                rgba(0, 122, 51, 0.2) 25%, 
+                rgba(255, 140, 0, 0.2) 50%, 
+                rgba(0, 0, 0, 0.2) 75%, 
+                rgba(255, 255, 255, 0.1) 100%);
+            z-index: -1;
+        }
+
+        .portfolio-title {
+            font-size: 3rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+            background: linear-gradient(135deg, var(--zambia-white), var(--zambia-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            font-weight: 400;
+            opacity: 0.9;
+            margin-bottom: 0;
+        }
+
+        /* Year selection with Zambian colors */
+        .year-selection {
+            background: linear-gradient(135deg, 
+                rgba(222, 32, 16, 0.2) 0%, 
+                rgba(0, 122, 51, 0.15) 50%, 
+                rgba(255, 140, 0, 0.1) 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 40px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .year-selection label {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: block;
+            color: var(--zambia-white);
+        }
+
+        .year-select {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 12px 20px;
+            font-size: 1.1rem;
+            color: var(--zambia-black);
+            width: 220px;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .year-select:focus {
+            outline: none;
+            border-color: var(--zambia-orange);
+            box-shadow: 0 0 20px rgba(255, 140, 0, 0.4);
+            transform: scale(1.05);
+        }
+
+        /* Department headings with Zambian colors */
+        .department-heading {
+            padding: 20px 25px;
+            border-left: 8px solid;
+            border-radius: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-top: 50px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .department-heading::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(255, 255, 255, 0.1) 50%, 
+                transparent 100%);
+            z-index: -1;
+        }
+
+        .red-theme .department-heading { 
+            background: linear-gradient(135deg, rgba(222, 32, 16, 0.4) 0%, rgba(222, 32, 16, 0.2) 100%);
+            border-color: var(--zambia-red); 
+            color: #f8d7da; 
+        }
+        .green-theme .department-heading { 
+            background: linear-gradient(135deg, rgba(0, 122, 51, 0.4) 0%, rgba(0, 122, 51, 0.2) 100%);
+            border-color: var(--zambia-green); 
+            color: #d4edda; 
+        }
+        .orange-theme .department-heading { 
+            background: linear-gradient(135deg, rgba(255, 140, 0, 0.5) 0%, rgba(255, 140, 0, 0.3) 100%);
+            border-color: var(--zambia-orange); 
+            color: #fff3cd; 
+        }
+
+        /* Subsidiary cards with Zambian colors */
+        .subsidiary-card {
+            background: linear-gradient(135deg, 
+                rgba(222, 32, 16, 0.15) 0%, 
+                rgba(0, 122, 51, 0.1) 50%, 
+                rgba(255, 140, 0, 0.05) 100%);
+            border-radius: 15px;
+            padding: 20px 25px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s ease;
+            flex-wrap: wrap;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .subsidiary-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .subsidiary-card:hover::before {
+            left: 100%;
+        }
+
+        .subsidiary-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            background: linear-gradient(135deg, 
+                rgba(222, 32, 16, 0.25) 0%, 
+                rgba(0, 122, 51, 0.2) 50%, 
+                rgba(255, 140, 0, 0.15) 100%);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .orange-theme .subsidiary-card {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.9) 0%, 
+                rgba(255, 255, 255, 0.8) 100%);
+            color: var(--zambia-black);
+        }
+
+        .subsidiary-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-grow: 1;
+        }
+
+        .subsidiary-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            object-fit: cover;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            background: white;
+            padding: 2px;
+        }
+
+        .orange-theme .subsidiary-logo {
+            border-color: rgba(0, 0, 0, 0.2);
+        }
+
+        .subsidiary-card:hover .subsidiary-logo {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .subsidiary-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        /* Score buttons with Zambian colors */
+        .btn-score {
+            font-weight: 700;
+            padding: 12px 24px;
+            border-radius: 10px;
+            border: none;
+            transition: all 0.3s ease;
+            min-width: 120px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-score::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-score:hover::before {
+            left: 100%;
+        }
+
+        .red-theme .btn-score {
+            background: linear-gradient(135deg, var(--zambia-red), #b31a0d);
+            color: var(--zambia-white);
+            box-shadow: 0 4px 15px rgba(222, 32, 16, 0.4);
+        }
+
+        .green-theme .btn-score {
+            background: linear-gradient(135deg, var(--zambia-green), #005a27);
+            color: var(--zambia-white);
+            box-shadow: 0 4px 15px rgba(0, 122, 51, 0.4);
+        }
+
+        .orange-theme .btn-score {
+            background: linear-gradient(135deg, var(--zambia-orange), #cc7000);
+            color: var(--zambia-black);
+            box-shadow: 0 4px 15px rgba(255, 140, 0, 0.4);
+        }
+
+        .btn-score:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .btn-score:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-score.loading {
+            pointer-events: none;
+        }
+
+        /* Back button with Zambian colors */
+        .btn-back {
+            color: #ccc;
+            text-decoration: none;
+            margin-bottom: 30px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            padding: 10px 20px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-back:hover {
+            text-decoration: none;
+            color: var(--zambia-white);
+            background: linear-gradient(135deg, 
+                rgba(222, 32, 16, 0.2) 0%, 
+                rgba(0, 122, 51, 0.15) 100%);
+            transform: translateX(-5px);
+        }
+
+        /* No year selected message */
+        .no-year-selected {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, 
+                rgba(222, 32, 16, 0.2) 0%, 
+                rgba(0, 122, 51, 0.1) 100%);
+            border-radius: 15px;
+            margin: 30px 0;
+            border: 1px solid rgba(222, 32, 16, 0.3);
+        }
+
+        /* Stats bar with Zambian colors */
+        .stats-bar {
+            background: linear-gradient(135deg, 
+                rgba(222, 32, 16, 0.2) 0%, 
+                rgba(0, 122, 51, 0.15) 33%, 
+                rgba(255, 140, 0, 0.1) 66%, 
+                rgba(0, 0, 0, 0.1) 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            display: block;
+            background: linear-gradient(135deg, var(--zambia-white), var(--zambia-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        /* Toast notifications */
+        .toast-container {
+            z-index: 9999;
+        }
+
+        /* Logo placeholder with Zambian colors */
+        .logo-placeholder {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--zambia-red), var(--zambia-green));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+            text-align: center;
+            padding: 5px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .orange-theme .logo-placeholder {
+            background: linear-gradient(135deg, var(--zambia-orange), var(--zambia-gold));
+            color: var(--zambia-black);
+            border-color: rgba(0, 0, 0, 0.2);
+        }
+
+        /* Search box with Zambian colors */
+        .search-box {
+            background: linear-gradient(135deg, 
+                rgba(222, 32, 16, 0.2) 0%, 
+                rgba(0, 122, 51, 0.15) 100%);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .search-box input {
+            background: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            padding: 10px 15px;
+            color: var(--zambia-black);
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--zambia-orange);
+            box-shadow: 0 0 15px rgba(255, 140, 0, 0.4);
+        }
+
+        /* Zambian flag badge */
+        .zambia-badge {
+            background: linear-gradient(135deg, 
+                var(--zambia-red) 0%, 
+                var(--zambia-red) 25%, 
+                var(--zambia-black) 25%, 
+                var(--zambia-black) 50%, 
+                var(--zambia-orange) 50%, 
+                var(--zambia-orange) 75%, 
+                var(--zambia-green) 75%, 
+                var(--zambia-green) 100%);
+            color: white;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .subsidiary-card {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 20px;
+                text-align: center;
+            }
+
+            .subsidiary-info {
+                margin-bottom: 15px;
+                width: 100%;
+                justify-content: center;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .btn-score {
+                width: 100%;
+                margin-top: 10px;
+            }
+
+            .portfolio-title {
+                font-size: 2.2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .portfolio-title {
+                font-size: 1.8rem;
+            }
+
+            .department-heading {
+                font-size: 1.3rem;
+                padding: 15px 20px;
+            }
+
+            .subsidiary-logo, .logo-placeholder {
+                width: 45px;
+                height: 45px;
+            }
+
+            .subsidiary-name {
+                font-size: 1.1rem;
+            }
+
+            .year-select {
+                width: 100%;
+                max-width: 250px;
+            }
+
+            .overlay {
+                padding: 60px 20px 40px;
+            }
+        }
+
+        /* Animation classes */
+        .fade-in {
+            animation: fadeIn 0.6s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .slide-in {
+            animation: slideIn 0.8s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body
+    {% if portfolio and portfolio.name == 'Mining & Energy' %}
+        class="red-theme"
+        style="background-image: url('{{ url_for('static', filename='images/track.jfif') }}');"
+    {% elif portfolio and portfolio.name == 'Manufacturing & Agriculture' %}
+        class="green-theme"
+        style="background-image: url('{{ url_for('static', filename='images/tractor.jfif') }}');"
+    {% elif portfolio and portfolio.name == 'Tourism Infrastructure & Services' %}
+        class="orange-theme"
+        style="background-image: url('{{ url_for('static', filename='images/airways.webp') }}');"
+    {% endif %}
+>
+    <div class="overlay container">
+        <div class="form-container">
+            <!-- Back Button -->
+            <a href="{{ url_for('routes.portfolio') }}" class="btn-back slide-in">
+                <i class="bi bi-arrow-left"></i> Back to Portfolios
+                <span class="zambia-badge">Zambia</span>
+            </a>
+
+            <!-- Hero Section -->
+            <div class="hero-box fade-in">
+                <h1 class="portfolio-title">{{ portfolio.name }}</h1>
+                <p class="hero-subtitle">Manage performance scoring and analytics for portfolio subsidiaries</p>
+            </div>
+
+            <!-- Year Selection Section -->
+            <div class="year-selection fade-in">
+                <label for="yearSelect">
+                    <i class="bi bi-calendar-check me-2"></i>Select Year for Scoring
+                </label>
+                <select id="yearSelect" class="year-select" onchange="updateScoreLinks()">
+                    <option value="">Choose a year...</option>
+                    {% for year in years %}
+                    <option value="{{ year.id }}" {% if year.is_active %}selected{% endif %}>
+                        {{ year.year }}{% if year.is_active %} (Active){% endif %}
+                    </option>
+                    {% endfor %}
+                </select>
+                <div class="mt-2">
+                    <small class="text-muted">Select a year to enable scoring for all subsidiaries</small>
+                </div>
+            </div>
+
+            <!-- Search Box -->
+            <div class="search-box fade-in">
+                <input type="text" id="searchInput" placeholder="Search subsidiaries by name..." class="form-control">
+            </div>
+
+            {% if not years %}
+            <div class="no-year-selected fade-in">
+                <i class="bi bi-exclamation-triangle display-4 mb-3"></i>
+                <h4>No Years Available</h4>
+                <p class="mb-3">Please add years in the Data Management System to enable scoring.</p>
+                <a href="{{ url_for('routes.seed_management') }}" class="btn btn-danger">
+                    <i class="bi bi-gear me-2"></i>Go to Data Management
+                </a>
+            </div>
+            {% endif %}
+
+            <!-- Subsidiaries by Department -->
+            {% for department_name, subsidiaries in department_clusters.items() %}
+                <div class="department-heading slide-in">
+                    <i class="bi bi-building me-3"></i>{{ department_name }}
+                    <span class="badge bg-light text-dark ms-2">{{ subsidiaries|length }} subsidiaries</span>
+                </div>
+
+                {% if subsidiaries %}
+                    <div class="row">
+                        {% for sub in subsidiaries %}
+                            <div class="col-md-6 col-lg-4">
+                                <div class="subsidiary-card fade-in" style="animation-delay: {{ loop.index * 0.1 }}s;">
+                                    <div class="subsidiary-info">
+                                        <!-- Logo display with multiple fallbacks -->
+                                        {% if sub.name in logo_mappings %}
+                                            <img src="{{ logo_mappings[sub.name] }}" 
+                                                 alt="{{ sub.name }} Logo" 
+                                                 class="subsidiary-logo"
+                                                 onerror="handleLogoError(this, '{{ sub.name }}')">
+                                        {% elif sub.logo_url %}
+                                            <img src="{{ url_for('static', filename=sub.logo_url) }}" 
+                                                 alt="{{ sub.name }} Logo" 
+                                                 class="subsidiary-logo"
+                                                 onerror="handleLogoError(this, '{{ sub.name }}')">
+                                        {% else %}
+                                            <div class="logo-placeholder" title="{{ sub.name }}">
+                                                <small>{{ sub.name[:3]|upper }}</small>
+                                            </div>
+                                        {% endif %}
+                                        <span class="subsidiary-name">{{ sub.name }}</span>
+                                    </div>
+                                    <a href="#" class="btn btn-score" data-subsidiary-id="{{ sub.id }}" onclick="return handleScoreClick(this)">
+                                        <i class="bi bi-graph-up"></i>
+                                        <span class="btn-text">Score</span>
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center text-muted py-4">
+                        <i class="bi bi-inbox display-4"></i>
+                        <p class="mt-2">No subsidiaries found in this department</p>
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+            <!-- Statistics Bar -->
+            <div class="stats-bar fade-in">
+                <div class="row text-center">
+                    <div class="col-md-3 stat-item">
+                        <span class="stat-number">
+                            {% set total_depts = department_clusters|length %}
+                            {{ total_depts }}
+                        </span>
+                        <span class="stat-label">Departments</span>
+                    </div>
+                    <div class="col-md-3 stat-item">
+                        <span class="stat-number">
+                            {% set total_subsidiaries = namespace(count=0) %}
+                            {% for department_name, subsidiaries in department_clusters.items() %}
+                                {% set total_subsidiaries.count = total_subsidiaries.count + subsidiaries|length %}
+                            {% endfor %}
+                            {{ total_subsidiaries.count }}
+                        </span>
+                        <span class="stat-label">Total Subsidiaries</span>
+                    </div>
+                    <div class="col-md-3 stat-item">
+                        <span class="stat-number">{{ years|length if years else 0 }}</span>
+                        <span class="stat-label">Available Years</span>
+                    </div>
+                    <div class="col-md-3 stat-item">
+                        <span class="stat-number">
+                            {% set active_year = years|selectattr('is_active')|first %}
+                            {{ active_year.year if active_year else 'N/A' }}
+                        </span>
+                        <span class="stat-label">Active Year</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Debug Info (Visible only in development) -->
+            {% if config.get('ENV') == 'development' %}
+            <div class="mt-4 p-3 bg-dark text-muted rounded">
+                <small>
+                    <strong>Debug Info:</strong><br>
+                    Portfolio: {{ portfolio.name }}<br>
+                    Departments: {{ department_clusters|length }}<br>
+                    Total Subsidiaries: {{ total_subsidiaries.count }}<br>
+                    Years Available: {{ years|length }}<br>
+                    Logo Mappings Loaded: {{ logo_mappings|length }}
+                </small>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container position-fixed top-0 end-0 p-3"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Logo error handling
+        function handleLogoError(img, subsidiaryName) {
+            console.warn(`Logo failed to load for ${subsidiaryName}`);
+            
+            // Replace broken image with placeholder
+            const parent = img.parentElement;
+            const placeholder = document.createElement('div');
+            placeholder.className = 'logo-placeholder';
+            placeholder.title = subsidiaryName;
+            placeholder.innerHTML = `<small>${subsidiaryName.substring(0, 3).toUpperCase()}</small>`;
+            
+            parent.replaceChild(placeholder, img);
+        }
+
+        function updateScoreLinks() {
+            const yearSelect = document.getElementById('yearSelect');
+            const selectedYearId = yearSelect.value;
+            const selectedYearText = yearSelect.options[yearSelect.selectedIndex]?.text || 'Year';
+            const scoreButtons = document.querySelectorAll('.btn-score');
+            
+            scoreButtons.forEach(button => {
+                const btnText = button.querySelector('.btn-text');
+                if (selectedYearId) {
+                    const subsidiaryId = button.getAttribute('data-subsidiary-id');
+                    button.href = `/entry/${subsidiaryId}/${selectedYearId}`;
+                    button.removeAttribute('disabled');
+                    button.style.opacity = '1';
+                    if (btnText) {
+                        btnText.textContent = `Score ${selectedYearText.split(' ')[0]}`;
+                    }
+                    
+                    // Add pulse animation to indicate enabled state
+                    button.classList.add('pulse');
+                } else {
+                    button.href = '#';
+                    button.setAttribute('disabled', 'disabled');
+                    button.style.opacity = '0.5';
+                    if (btnText) {
+                        btnText.textContent = 'Score';
+                    }
+                    
+                    // Remove pulse animation
+                    button.classList.remove('pulse');
+                }
+            });
+        }
+
+        function handleScoreClick(button) {
+            const yearSelect = document.getElementById('yearSelect');
+            const selectedYearId = yearSelect.value;
+            
+            if (!selectedYearId) {
+                showToast('Please select a year first to enable scoring', 'warning');
+                return false;
+            }
+            
+            // Show loading state
+            const btnText = button.querySelector('.btn-text');
+            const btnIcon = button.querySelector('i');
+            
+            if (btnText) btnText.textContent = 'Loading...';
+            if (btnIcon) {
+                btnIcon.className = 'spinner-border spinner-border-sm';
+            }
+            button.classList.add('loading');
+            button.disabled = true;
+            
+            return true;
+        }
+
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast align-items-center text-bg-${type} border-0`;
+            toast.setAttribute('role', 'alert');
+            toast.innerHTML = `
+                <div class="d-flex">
+                    <div class="toast-body">
+                        <i class="bi bi-${getToastIcon(type)} me-2"></i>
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            `;
+            
+            const container = document.getElementById('toastContainer');
+            container.appendChild(toast);
+            
+            const bsToast = new bootstrap.Toast(toast);
+            bsToast.show();
+            
+            // Remove toast from DOM after it's hidden
+            toast.addEventListener('hidden.bs.toast', () => {
+                toast.remove();
+            });
+        }
+
+        function getToastIcon(type) {
+            const icons = {
+                'info': 'info-circle',
+                'success': 'check-circle',
+                'warning': 'exclamation-triangle',
+                'danger': 'exclamation-octagon'
+            };
+            return icons[type] || 'info-circle';
+        }
+
+        // Preload logos for better user experience
+        function preloadLogos() {
+            const logoUrls = [
+                {% for sub_name, logo_url in logo_mappings.items() %}
+                    '{{ logo_url }}',
+                {% endfor %}
+            ];
+            
+            logoUrls.forEach(url => {
+                const img = new Image();
+                img.src = url;
+            });
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateScoreLinks();
+            preloadLogos();
+            
+            // Auto-select active year if available
+            const yearSelect = document.getElementById('yearSelect');
+            const activeYearOption = Array.from(yearSelect.options).find(opt => opt.text.includes('(Active)'));
+            if (activeYearOption) {
+                yearSelect.value = activeYearOption.value;
+                updateScoreLinks();
+            }
+            
+            // Add animation to cards
+            const cards = document.querySelectorAll('.subsidiary-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+
+            // Add keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    window.history.back();
+                }
+                // Ctrl/Cmd + 1-9 for quick department navigation
+                if ((e.ctrlKey || e.metaKey) && e.key >= '1' && e.key <= '9') {
+                    const deptIndex = parseInt(e.key) - 1;
+                    const departments = document.querySelectorAll('.department-heading');
+                    if (departments[deptIndex]) {
+                        departments[deptIndex].scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+
+            // Add search functionality
+            const searchInput = document.getElementById('searchInput');
+            
+            searchInput.addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                const cards = document.querySelectorAll('.subsidiary-card');
+                
+                cards.forEach(card => {
+                    const subsidiaryName = card.querySelector('.subsidiary-name').textContent.toLowerCase();
+                    if (subsidiaryName.includes(searchTerm)) {
+                        card.style.display = 'flex';
+                        card.classList.add('pulse');
+                        setTimeout(() => card.classList.remove('pulse'), 1000);
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Export functionality for debugging
+        window.debugInfo = {
+            getSubsidiaryData: function() {
+                return {
+                    portfolio: '{{ portfolio.name }}',
+                    departments: {{ department_clusters|length }},
+                    totalSubsidiaries: {{ total_subsidiaries.count }},
+                    years: {{ years|length }},
+                    logoMappings: {{ logo_mappings|length }}
+                };
+            },
+            listSubsidiaries: function() {
+                const subsidiaries = [];
+                document.querySelectorAll('.subsidiary-card').forEach(card => {
+                    subsidiaries.push({
+                        name: card.querySelector('.subsidiary-name').textContent,
+                        id: card.querySelector('.btn-score').getAttribute('data-subsidiary-id')
+                    });
+                });
+                return subsidiaries;
+            }
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,668 @@
+{% extends "base.html" %}
+
+{% block title %}About Us - Portfolio Management System{% endblock %}
+
+{% block content_title %}About the Portfolio Department{% endblock %}
+
+{% block content_subtitle %}Driving efficiency and insight in subsidiary performance monitoring with Zambian excellence{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Enhanced Hero Section */
+    .hero-section {
+        background: linear-gradient(135deg, var(--orange) 0%, var(--green) 100%);
+        padding: 6rem 0 4rem;
+        text-align: center;
+        color: var(--white);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10zM10 10c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10S0 25.523 0 20s4.477-10 10-10zm10 8c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm40 40c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        animation: float 20s infinite linear;
+    }
+    
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+    
+    .hero-section h1 {
+        font-weight: 800;
+        font-size: 4rem;
+        margin-bottom: 1.5rem;
+        text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+        background: linear-gradient(135deg, #ffffff, #f0f0f0);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .hero-section .lead {
+        font-size: 1.6rem;
+        max-width: 800px;
+        margin: 0 auto 2rem;
+        opacity: 0.95;
+        font-weight: 400;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+    }
+    
+    /* Mission Section */
+    .mission-section {
+        padding: 5rem 0;
+        background: var(--white);
+    }
+    
+    .mission-card {
+        border-radius: 20px;
+        padding: 3rem;
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 121, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .mission-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 5px;
+        height: 100%;
+        background: linear-gradient(135deg, var(--orange), var(--green));
+    }
+    
+    .section-title {
+        font-weight: 700;
+        margin-bottom: 2rem;
+        position: relative;
+        padding-bottom: 1rem;
+        color: var(--black);
+    }
+    
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 80px;
+        height: 4px;
+        background: linear-gradient(135deg, var(--orange), var(--green));
+        border-radius: 2px;
+    }
+    
+    /* Features Grid */
+    .features-grid {
+        padding: 4rem 0;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    }
+    
+    .feature-card {
+        background: var(--white);
+        border-radius: 16px;
+        padding: 2.5rem 2rem;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        transition: all 0.4s ease;
+        border: 1px solid rgba(255, 121, 0, 0.1);
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .feature-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(135deg, var(--orange), var(--green));
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+    
+    .feature-card:hover::before {
+        transform: scaleX(1);
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    }
+    
+    .feature-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        font-size: 2rem;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+    
+    .feature-card:hover .feature-icon {
+        transform: scale(1.1) rotate(5deg);
+    }
+    
+    .feature-icon.orange { 
+        background: linear-gradient(135deg, rgba(255, 121, 0, 0.1), rgba(255, 121, 0, 0.05)); 
+        color: var(--orange); 
+        border: 2px solid rgba(255, 121, 0, 0.2);
+    }
+    .feature-icon.green { 
+        background: linear-gradient(135deg, rgba(0, 150, 57, 0.1), rgba(0, 150, 57, 0.05)); 
+        color: var(--green); 
+        border: 2px solid rgba(0, 150, 57, 0.2);
+    }
+    .feature-icon.red { 
+        background: linear-gradient(135deg, rgba(206, 17, 38, 0.1), rgba(206, 17, 38, 0.05)); 
+        color: var(--red); 
+        border: 2px solid rgba(206, 17, 38, 0.2);
+    }
+    .feature-icon.black { 
+        background: linear-gradient(135deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.05)); 
+        color: var(--black); 
+        border: 2px solid rgba(0, 0, 0, 0.2);
+    }
+    
+    .feature-card h5 {
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--black);
+    }
+    
+    .feature-card p {
+        color: #6c757d;
+        line-height: 1.6;
+    }
+    
+    /* Quote Section */
+    .quote-section {
+        padding: 4rem 0;
+        background: var(--white);
+    }
+    
+    .quote-card {
+        background: linear-gradient(135deg, rgba(255, 121, 0, 0.05), rgba(0, 150, 57, 0.05));
+        border-radius: 20px;
+        padding: 3rem;
+        border-left: 6px solid var(--orange);
+        position: relative;
+    }
+    
+    .quote-card::before {
+        content: '"';
+        position: absolute;
+        top: -10px;
+        left: 2rem;
+        font-size: 6rem;
+        color: rgba(255, 121, 0, 0.2);
+        font-family: Georgia, serif;
+        line-height: 1;
+    }
+    
+    .quote-text {
+        font-size: 1.3rem;
+        font-style: italic;
+        color: var(--black);
+        line-height: 1.7;
+        margin-bottom: 1.5rem;
+        position: relative;
+        z-index: 2;
+    }
+    
+    /* Developer Section */
+    .developer-section {
+        background: linear-gradient(135deg, var(--black) 0%, var(--dark-bg) 100%);
+        padding: 6rem 0;
+        color: var(--white);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .developer-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ff7900' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+    }
+    
+    .developer-card {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 25px;
+        padding: 3rem;
+        text-align: center;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 121, 0, 0.3);
+        position: relative;
+        z-index: 2;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+    
+    .developer-img {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin: 0 auto 2rem;
+        border: 4px solid var(--orange);
+        box-shadow: 0 15px 35px rgba(255, 121, 0, 0.3);
+        transition: all 0.3s ease;
+    }
+    
+    .developer-img:hover {
+        transform: scale(1.05);
+        box-shadow: 0 20px 45px rgba(255, 121, 0, 0.5);
+    }
+    
+    .developer-name {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(135deg, var(--orange), var(--white));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .developer-title {
+        font-size: 1.3rem;
+        color: var(--orange);
+        margin-bottom: 1.5rem;
+        font-weight: 500;
+    }
+    
+    .developer-bio {
+        font-size: 1.1rem;
+        line-height: 1.7;
+        margin-bottom: 2rem;
+        color: rgba(255, 255, 255, 0.8);
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .developer-social-links {
+        margin-top: 2rem;
+    }
+    
+    .developer-social-links a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.1);
+        color: var(--white);
+        margin: 0 0.7rem;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        font-size: 1.3rem;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .developer-social-links a::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: left 0.5s;
+    }
+    
+    .developer-social-links a:hover::before {
+        left: 100%;
+    }
+    
+    .developer-social-links a:hover {
+        background: var(--orange);
+        transform: translateY(-5px) scale(1.1);
+        box-shadow: 0 10px 25px rgba(255, 121, 0, 0.4);
+    }
+    
+    .social-tooltip {
+        position: absolute;
+        bottom: -40px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--orange);
+        color: white;
+        padding: 5px 10px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        white-space: nowrap;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+    
+    .developer-social-links a:hover .social-tooltip {
+        opacity: 1;
+    }
+    
+    /* Stats Section */
+    .stats-section {
+        padding: 4rem 0;
+        background: linear-gradient(135deg, var(--orange) 0%, var(--green) 100%);
+        color: var(--white);
+    }
+    
+    .stat-item {
+        text-align: center;
+        padding: 2rem;
+    }
+    
+    .stat-number {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    
+    .stat-label {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .hero-section h1 {
+            font-size: 2.8rem;
+        }
+        
+        .hero-section .lead {
+            font-size: 1.3rem;
+        }
+        
+        .mission-card {
+            padding: 2rem;
+        }
+        
+        .developer-name {
+            font-size: 2rem;
+        }
+        
+        .feature-card {
+            padding: 2rem 1.5rem;
+        }
+        
+        .hero-section {
+            padding: 4rem 0 3rem;
+        }
+    }
+    
+    /* Animations */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .fade-in-up {
+        animation: fadeInUp 0.8s ease-out;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<header class="hero-section">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="fade-in-up">{{ self.content_title() }}</h1>
+            <p class="lead fade-in-up">{{ self.content_subtitle() }}</p>
+            <div class="flag-colors mt-4 fade-in-up">
+                <div class="flag-color orange"></div>
+                <div class="flag-color black"></div>
+                <div class="flag-color red"></div>
+                <div class="flag-color green"></div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Mission Section -->
+<section class="mission-section">
+    <div class="container">
+        <div class="mission-card">
+            <h2 class="section-title">Our Mission & Vision</h2>
+            <div class="row">
+                <div class="col-lg-6">
+                    <h4 class="text-orange mb-3">
+                        <i class="fas fa-bullseye me-2"></i>Our Mission
+                    </h4>
+                    <p class="mb-4">
+                        To empower administrators with comprehensive tools for real-time subsidiary performance monitoring. 
+                        We centralize evaluation records, streamline data entry, and facilitate robust progress tracking 
+                        across diverse portfolios, providing a simplified, intuitive platform that enhances oversight 
+                        and optimizes reporting capabilities.
+                    </p>
+                </div>
+                <div class="col-lg-6">
+                    <h4 class="text-green mb-3">
+                        <i class="fas fa-eye me-2"></i>Our Vision
+                    </h4>
+                    <p class="mb-0">
+                        To transform complex data into actionable insights, ensuring all stakeholders have a clear 
+                        understanding of performance trajectories and areas for improvement within each subsidiary, 
+                        ultimately contributing to more informed strategic decisions for Zambia's public enterprises.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Grid -->
+<section class="features-grid">
+    <div class="container">
+        <h2 class="section-title text-center mb-5">Key Features & Capabilities</h2>
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card fade-in-up">
+                    <div class="feature-icon orange">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h5>Centralized Monitoring</h5>
+                    <p>Unified view of all subsidiary performance data with real-time updates and comprehensive analytics dashboards.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card fade-in-up">
+                    <div class="feature-icon green">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                    <h5>Streamlined Data Entry</h5>
+                    <p>Intuitive interfaces for efficient evaluation recording with validation and automation features.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card fade-in-up">
+                    <div class="feature-icon red">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <h5>Progress Tracking</h5>
+                    <p>Advanced tools to track and visualize performance trends over time with customizable metrics.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="feature-card fade-in-up">
+                    <div class="feature-icon black">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <h5>Dashboard Reporting</h5>
+                    <p>Customizable dashboards for quick insights and strategic overview with export capabilities.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3 col-6">
+                <div class="stat-item">
+                    <div class="stat-number">47+</div>
+                    <div class="stat-label">Subsidiaries</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-item">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Portfolios</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-item">
+                    <div class="stat-number">156</div>
+                    <div class="stat-label">KPIs Tracked</div>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Monitoring</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quote Section -->
+<section class="quote-section">
+    <div class="container">
+        <div class="quote-card">
+            <p class="quote-text">
+                This platform serves as a critical internal tool, developed to foster clarity, accountability, 
+                and efficiency within our portfolio management operations. By integrating key metrics and providing 
+                accessible dashboards, we ensure all stakeholders have a clear understanding of performance 
+                trajectories and areas for improvement.
+            </p>
+            <div class="d-flex align-items-center">
+                <div class="bg-orange rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                    <i class="fas fa-quote-right text-white"></i>
+                </div>
+                <div class="ms-3">
+                    <strong class="text-orange">Portfolio Department</strong>
+                    <div class="text-muted">Government of Zambia</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Developer Section -->
+<section class="developer-section">
+    <div class="container">
+        <div class="developer-card">
+            <h2 class="section-title text-white text-center mb-5">Meet the Developer</h2>
+            
+            <img src="{{ url_for('static', filename='images/alpha1.png') }}" 
+                 alt="Alphaus Nkandu" 
+                 class="developer-img">
+            
+            <h3 class="developer-name">Alphaus Nkandu</h3>
+            <div class="developer-title">
+                <i class="fas fa-code me-2"></i>
+                Full Stack Developer & Digital Solutions Architect
+            </div>
+            
+            <p class="developer-bio">
+                Passionate about creating efficient, user-friendly solutions that drive digital transformation 
+                in Zambia and beyond. With expertise in modern web technologies, data visualization, and 
+                performance optimization, I specialize in building scalable applications that solve real-world 
+                problems and enhance operational efficiency.
+            </p>
+            
+            <div class="developer-social-links">
+                <a href="https://alphaus.onrender.com" title="Portfolio" target="_blank">
+                    <i class="fas fa-globe"></i>
+                    <span class="social-tooltip">Portfolio</span>
+                </a>
+                <a href="https://www.linkedin.com/in/alphaus-nkandu" title="LinkedIn" target="_blank">
+                    <i class="fab fa-linkedin-in"></i>
+                    <span class="social-tooltip">LinkedIn</span>
+                </a>
+                <a href="https://github.com/Alphique" title="GitHub" target="_blank">
+                    <i class="fab fa-github"></i>
+                    <span class="social-tooltip">GitHub</span>
+                </a>
+                <a href="mailto:alphaus@example.com" title="Email">
+                    <i class="fas fa-envelope"></i>
+                    <span class="social-tooltip">Email</span>
+                </a>
+                <a href="https://twitter.com/alphaus" title="Twitter" target="_blank">
+                    <i class="fab fa-twitter"></i>
+                    <span class="social-tooltip">Twitter</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add intersection observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.8s ease-out forwards';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Observe all elements with fade-in-up class
+        document.querySelectorAll('.fade-in-up').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Add hover effects to developer social links
+        const socialLinks = document.querySelectorAll('.developer-social-links a');
+        socialLinks.forEach(link => {
+            link.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px) scale(1.1)';
+            });
+            link.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    });
+</script>
+{% endblock %}

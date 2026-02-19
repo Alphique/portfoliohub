@@ -1,0 +1,44 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Attach to Edge",
+            "port": 9222,
+            "request": "attach",
+            "type": "msedge",
+            "webRoot": "${workspaceFolder}"
+        },
+        {
+            "name": "Python Debugger: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Run Flask App (Legacy Script)",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/backend/main.py",
+            "console": "integratedTerminal",
+            "env": {
+                "FLASK_APP": "backend/main.py",
+                "FLASK_ENV": "development"
+            },
+            "envFile": "${workspaceFolder}/.env",
+            "args": []
+        },
+        {
+            "name": "Run Flask App (Module Mode)",
+            "type": "python",
+            "request": "launch",
+            "module": "backend.main",
+            "console": "integratedTerminal",
+            "env": {
+                "FLASK_ENV": "development"
+            },
+            "envFile": "${workspaceFolder}/.env",
+            "justMyCode": false
+        }
+    ]
+}

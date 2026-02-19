@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Management System</title>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --danger: #ef4444;
+            --danger-hover: #dc2626;
+            --success: #10b981;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-700: #374151;
+            --gray-900: #111827;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #f9fafb;
+            color: var(--gray-900);
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .tabs {
+            display: flex;
+            background-color: var(--gray-100);
+            border-radius: 0.5rem;
+            padding: 0.25rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .tab {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .tab.active {
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--gray-700);
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid var(--gray-300);
+            border-radius: 0.375rem;
+            font-size: 1rem;
+        }
+        
+        button {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+            border: none;
+        }
+        
+        .btn-danger:hover {
+            background-color: var(--danger-hover);
+        }
+        
+        .btn-warning {
+            background-color: #f59e0b;
+            color: white;
+            border: none;
+        }
+        
+        .btn-warning:hover {
+            background-color: #d97706;
+        }
+        
+        .btn-secondary {
+            background-color: var(--gray-200);
+            color: var(--gray-700);
+            border: none;
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--gray-300);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        th {
+            font-weight: 500;
+            background-color: var(--gray-100);
+        }
+        
+        tr:hover {
+            background-color: var(--gray-100);
+        }
+        
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+        }
+        
+        .modal {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            width: 100%;
+            max-width: 28rem;
+            padding: 1.5rem;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .delete-btn {
+            color: var(--danger);
+            cursor: pointer;
+            margin-right: 1rem;
+        }
+        
+        .delete-btn:hover {
+            text-decoration: underline;
+        }
+        
+        .force-delete-btn {
+            color: #dc2626;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .force-delete-btn:hover {
+            text-decoration: underline;
+        }
+        
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray-500);
+        }
+        
+        .empty-state p {
+            margin: 0.5rem 0;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" x-data="dataManager()" x-init="init()">
+        <!-- Header -->
+        <div class="header">
+            <h1>Data Management System</h1>
+            <button class="btn-danger" @click="showDeleteAllModal = true">
+                Purge All Data
+            </button>
+        </div>
+        
+        <!-- Navigation Tabs -->
+        <div class="tabs">
+            <div class="tab" :class="{ active: activeTab === 'year' }" @click="activeTab = 'year'">Year</div>
+            <div class="tab" :class="{ active: activeTab === 'portfolio' }" @click="activeTab = 'portfolio'">Portfolio</div>
+            <div class="tab" :class="{ active: activeTab === 'department' }" @click="activeTab = 'department'">Department</div>
+            <div class="tab" :class="{ active: activeTab === 'subsidiary' }" @click="activeTab = 'subsidiary'">Subsidiary</div>
+            <div class="tab" :class="{ active: activeTab === 'category' }" @click="activeTab = 'category'">Category</div>
+            <div class="tab" :class="{ active: activeTab === 'kpi' }" @click="activeTab = 'kpi'">KPI</div>
+        </div>
+        
+        <!-- Forms -->
+        <div class="card" x-show="activeTab === 'year'">
+            <h2 class="section-title">Year Configuration</h2>
+            <form method="POST">
+                <input type="hidden" name="entity_type" value="year">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Year</label>
+                        <input type="number" name="year" placeholder="e.g., 2024" required min="2000" max="2030">
+                    </div>
+                    <div class="form-group">
+                        <label>Start Date</label>
+                        <input type="date" name="start_date">
+                    </div>
+                    <div class="form-group">
+                        <label>End Date</label>
+                        <input type="date" name="end_date">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="inline-flex items-center">
+                        <input type="checkbox" name="is_active" class="mr-2">
+                        <span>Active Year</span>
+                    </label>
+                </div>
+                <button type="submit" class="btn-primary">Add Year</button>
+            </form>
+        </div>
+        
+        <div class="card" x-show="activeTab === 'portfolio'">
+            <h2 class="section-title">Portfolio</h2>
+            <form method="POST">
+                <input type="hidden" name="entity_type" value="portfolio">
+                <div class="form-group">
+                    <label>Portfolio Name</label>
+                    <input type="text" name="name" placeholder="e.g., Technology Division" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="description" placeholder="Portfolio description"></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Add Portfolio</button>
+            </form>
+        </div>
+        
+        <div class="card" x-show="activeTab === 'department'">
+            <h2 class="section-title">Department</h2>
+            <form method="POST">
+                <input type="hidden" name="entity_type" value="department">
+                <div class="form-group">
+                    <label>Department Name</label>
+                    <input type="text" name="name" placeholder="e.g., Software Development" required>
+                </div>
+                <div class="form-group">
+                    <label>Portfolio</label>
+                    <select name="portfolio_id" required>
+                        <option value="">Select Portfolio</option>
+                        {% for portfolio in portfolios %}
+                        <option value="{{ portfolio.id }}">{{ portfolio.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary">Add Department</button>
+            </form>
+        </div>
+        
+        <div class="card" x-show="activeTab === 'subsidiary'">
+            <h2 class="section-title">Subsidiary</h2>
+            <form method="POST">
+                <input type="hidden" name="entity_type" value="subsidiary">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Subsidiary Name</label>
+                        <input type="text" name="name" placeholder="e.g., Mobile Applications Team" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Short Name</label>
+                        <input type="text" name="short_name" placeholder="e.g., MAT">
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Portfolio</label>
+                        <select id="subsidiaryPortfolio" name="portfolio_id" required>
+                            <option value="">Select Portfolio</option>
+                            {% for portfolio in portfolios %}
+                            <option value="{{ portfolio.id }}">{{ portfolio.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Department</label>
+                        <select id="subsidiaryDepartment" name="department_id" required disabled>
+                            <option value="">Select Department</option>
+                            {% for department in departments %}
+                            <option value="{{ department.id }}">{{ department.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary">Add Subsidiary</button>
+            </form>
+        </div>
+        
+        <div class="card" x-show="activeTab === 'category'">
+            <h2 class="section-title">Category</h2>
+            <form method="POST">
+                <input type="hidden" name="entity_type" value="category">
+                <div class="form-group">
+                    <label>Category Name</label>
+                    <input type="text" name="name" placeholder="e.g., Performance Metrics" required>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Weight</label>
+                        <input type="number" step="1" min="1" max="100" name="weight" value="100" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Year</label>
+                        <select name="year_id" required>
+                            <option value="">Select Year</option>
+                            {% for year in years %}
+                            <option value="{{ year.id }}">{{ year.year }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Subsidiary</label>
+                    <select name="subsidiary_id" required>
+                        <option value="">Select Subsidiary</option>
+                        {% for subsidiary in subsidiaries %}
+                        <option value="{{ subsidiary.id }}">{{ subsidiary.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary">Add Category</button>
+            </form>
+        </div>
+        
+        <div class="card" x-show="activeTab === 'kpi'">
+            <h2 class="section-title">KPI</h2>
+            <form method="POST">
+                <input type="hidden" name="entity_type" value="kpi">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>KPI Name</label>
+                        <input type="text" name="name" placeholder="e.g., User Satisfaction Score" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select name="category_id" required>
+                            <option value="">Select Category</option>
+                            {% for category in categories %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Weight</label>
+                        <input type="number" step="0.1" min="0.1" name="weight" placeholder="e.g., 25.0" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Target</label>
+                        <input type="number" step="1" min="0" max="100" name="target" value="80" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Calculation Method</label>
+                        <select name="calculation_method">
+                            <option value="direct">Direct</option>
+                            <option value="inverse">Inverse</option>
+                            <option value="weighted">Weighted</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea name="description" placeholder="KPI description"></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Add KPI</button>
+            </form>
+        </div>
+        
+        <!-- Data Tables -->
+        <div class="card">
+            <h2 class="section-title">Existing Data</h2>
+            
+            <!-- Portfolios Table -->
+            <h3 class="text-lg font-semibold mt-4 mb-2">Portfolios</h3>
+            <div class="overflow-x-auto">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if portfolios %}
+                            {% for portfolio in portfolios %}
+                            <tr id="portfolio-row-{{ portfolio.id }}">
+                                <td>{{ portfolio.name }}</td>
+                                <td>{{ portfolio.description or 'No description' }}</td>
+                                <td>{{ 'Active' if portfolio.is_active else 'Inactive' }}</td>
+                                <td class="action-buttons">
+                                    <span class="delete-btn" @click="confirmSingleDelete('portfolio', {{ portfolio.id }}, '{{ portfolio.name }}')">
+                                        Delete
+                                    </span>
+                                    <span class="force-delete-btn" @click="confirmForceDelete('portfolio', {{ portfolio.id }}, '{{ portfolio.name }}')">
+                                        Force Delete
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="4" class="empty-state">
+                                    <p>No portfolios found</p>
+                                    <p class="text-sm">Add your first portfolio using the form above</p>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Departments Table -->
+            <h3 class="text-lg font-semibold mt-6 mb-2">Departments</h3>
+            <div class="overflow-x-auto">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Portfolio</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if departments %}
+                            {% for department in departments %}
+                            <tr id="department-row-{{ department.id }}">
+                                <td>{{ department.name }}</td>
+                                <td>{{ department.portfolio.name if department.portfolio else 'N/A' }}</td>
+                                <td class="action-buttons">
+                                    <span class="delete-btn" @click="confirmSingleDelete('department', {{ department.id }}, '{{ department.name }}')">
+                                        Delete
+                                    </span>
+                                    <span class="force-delete-btn" @click="confirmForceDelete('department', {{ department.id }}, '{{ department.name }}')">
+                                        Force Delete
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="3" class="empty-state">
+                                    <p>No departments found</p>
+                                    <p class="text-sm">Add your first department using the form above</p>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Subsidiaries Table -->
+            <h3 class="text-lg font-semibold mt-6 mb-2">Subsidiaries</h3>
+            <div class="overflow-x-auto">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Short Name</th>
+                            <th>Department</th>
+                            <th>Portfolio</th>
+                            <th>Actions</th>
+                        </tr>
+                    <thead>
+                    <tbody>
+                        {% if subsidiaries %}
+                            {% for subsidiary in subsidiaries %}
+                            <tr id="subsidiary-row-{{ subsidiary.id }}">
+                                <td>{{ subsidiary.name }}</td>
+                                <td>{{ subsidiary.short_name or 'N/A' }}</td>
+                                <td>{{ subsidiary.department.name if subsidiary.department else 'N/A' }}</td>
+                                <td>{{ subsidiary.portfolio.name if subsidiary.portfolio else 'N/A' }}</td>
+                                <td class="action-buttons">
+                                    <span class="delete-btn" @click="confirmSingleDelete('subsidiary', {{ subsidiary.id }}, '{{ subsidiary.name }}')">
+                                        Delete
+                                    </span>
+                                    <span class="force-delete-btn" @click="confirmForceDelete('subsidiary', {{ subsidiary.id }}, '{{ subsidiary.name }}')">
+                                        Force Delete
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="5" class="empty-state">
+                                    <p>No subsidiaries found</p>
+                                    <p class="text-sm">Add your first subsidiary using the form above</p>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Categories Table -->
+            <h3 class="text-lg font-semibold mt-6 mb-2">Categories</h3>
+            <div class="overflow-x-auto">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Weight</th>
+                            <th>Year</th>
+                            <th>Subsidiary</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if categories %}
+                            {% for category in categories %}
+                            <tr id="category-row-{{ category.id }}">
+                                <td>{{ category.name }}</td>
+                                <td>{{ category.weight }}</td>
+                                <td>{{ category.year.year if category.year else 'N/A' }}</td>
+                                <td>{{ category.subsidiary.name if category.subsidiary else 'N/A' }}</td>
+                                <td class="action-buttons">
+                                    <span class="delete-btn" @click="confirmSingleDelete('category', {{ category.id }}, '{{ category.name }}')">
+                                        Delete
+                                    </span>
+                                    <span class="force-delete-btn" @click="confirmForceDelete('category', {{ category.id }}, '{{ category.name }}')">
+                                        Force Delete
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="5" class="empty-state">
+                                    <p>No categories found</p>
+                                    <p class="text-sm">Add your first category using the form above</p>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- KPIs Table -->
+            <h3 class="text-lg font-semibold mt-6 mb-2">KPIs</h3>
+            <div class="overflow-x-auto">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Weight</th>
+                            <th>Target</th>
+                            <th>Category</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if kpis %}
+                            {% for kpi in kpis %}
+                            <tr id="kpi-row-{{ kpi.id }}">
+                                <td>{{ kpi.name }}</td>
+                                <td>{{ kpi.weight }}</td>
+                                <td>{{ kpi.target or 'N/A' }}</td>
+                                <td>{{ kpi.category.name if kpi.category else 'N/A' }}</td>
+                                <td>
+                                    <span class="delete-btn" @click="confirmSingleDelete('kpi', {{ kpi.id }}, '{{ kpi.name }}')">
+                                        Delete
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="5" class="empty-state">
+                                    <p>No KPIs found</p>
+                                    <p class="text-sm">Add your first KPI using the form above</p>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Years Table -->
+            <h3 class="text-lg font-semibold mt-6 mb-2">Years</h3>
+            <div class="overflow-x-auto">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Year</th>
+                            <th>Active</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if years %}
+                            {% for year in years %}
+                            <tr id="year-row-{{ year.id }}">
+                                <td>{{ year.year }}</td>
+                                <td>{{ 'Yes' if year.is_active else 'No' }}</td>
+                                <td>
+                                    <span class="delete-btn" @click="confirmSingleDelete('year', {{ year.id }}, '{{ year.year }}')">
+                                        Delete
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="3" class="empty-state">
+                                    <p>No years found</p>
+                                    <p class="text-sm">Add your first year using the form above</p>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Delete All Modal -->
+        <div class="modal-overlay" x-show="showDeleteAllModal" style="display: none;">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3 class="text-lg font-semibold">Delete All Data</h3>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-4 text-red-600 font-semibold">Warning: This action cannot be undone!</p>
+                    <p class="mb-4">This will permanently delete all data of the selected type.</p>
+                    <div class="form-group">
+                        <label>Select Entity Type</label>
+                        <select x-model="entityToDelete">
+                            <option value="">Select...</option>
+                            <option value="year">Year</option>
+                            <option value="portfolio">Portfolio</option>
+                            <option value="department">Department</option>
+                            <option value="subsidiary">Subsidiary</option>
+                            <option value="category">Category</option>
+                            <option value="kpi">KPI</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-secondary" @click="showDeleteAllModal = false">Cancel</button>
+                    <button class="btn-danger" @click="deleteAll()" :disabled="!entityToDelete">Delete All</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Single Delete Modal -->
+        <div class="modal-overlay" x-show="showSingleDeleteModal" style="display: none;">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3 class="text-lg font-semibold">Delete <span x-text="deleteEntityType"></span></h3>
+                </div>
+                <div class="modal-body">
+                    <p class="text-red-600 font-semibold">Warning: This action cannot be undone!</p>
+                    <p class="mt-2">Are you sure you want to delete:</p>
+                    <div class="p-2 bg-gray-100 rounded text-center my-4">
+                        <span class="font-bold" x-text="deleteEntityName"></span>
+                    </div>
+                    <p class="text-sm text-gray-600">This will permanently remove this item.</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-secondary" @click="showSingleDeleteModal = false">Cancel</button>
+                    <button class="btn-danger" @click="deleteSingle()">Delete</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Force Delete Modal -->
+        <div class="modal-overlay" x-show="showForceDeleteModal" style="display: none;">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3 class="text-lg font-semibold">Force Delete <span x-text="forceDeleteEntityType"></span></h3>
+                </div>
+                <div class="modal-body">
+                    <p class="text-red-600 font-semibold">DANGER: This will delete ALL associated data!</p>
+                    <p class="mt-2">Are you absolutely sure you want to force delete:</p>
+                    <div class="p-2 bg-red-100 rounded text-center my-4">
+                        <span class="font-bold" x-text="forceDeleteEntityName"></span>
+                    </div>
+                    <p class="text-sm text-red-600">
+                        <span x-text="getForceDeleteWarning()"></span>
+                    </p>
+                    <p class="text-sm text-gray-600 mt-2">This action cannot be undone and will permanently remove all related data.</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-secondary" @click="showForceDeleteModal = false">Cancel</button>
+                    <button class="btn-warning" @click="forceDeleteSingle()">Force Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('dataManager', () => ({
+                activeTab: 'year',
+                showDeleteAllModal: false,
+                showSingleDeleteModal: false,
+                showForceDeleteModal: false,
+                entityToDelete: '',
+                deleteEntityType: '',
+                deleteEntityId: null,
+                deleteEntityName: '',
+                forceDeleteEntityType: '',
+                forceDeleteEntityId: null,
+                forceDeleteEntityName: '',
+                
+                init() {
+                    this.setupDependentDropdowns();
+                },
+                
+                setupDependentDropdowns() {
+                    // Subsidiary department dropdown
+                    const subsidiaryPortfolio = document.getElementById('subsidiaryPortfolio');
+                    const subsidiaryDepartment = document.getElementById('subsidiaryDepartment');
+                    
+                    if (subsidiaryPortfolio) {
+                        subsidiaryPortfolio.addEventListener('change', (e) => {
+                            const portfolioId = e.target.value;
+                            subsidiaryDepartment.disabled = !portfolioId;
+                            
+                            if (portfolioId) {
+                                // Enable department selection when portfolio is selected
+                                subsidiaryDepartment.disabled = false;
+                            }
+                        });
+                    }
+                },
+                
+                confirmSingleDelete(entityType, entityId, entityName) {
+                    this.deleteEntityType = entityType;
+                    this.deleteEntityId = entityId;
+                    this.deleteEntityName = entityName;
+                    this.showSingleDeleteModal = true;
+                },
+
+                confirmForceDelete(entityType, entityId, entityName) {
+                    this.forceDeleteEntityType = entityType;
+                    this.forceDeleteEntityId = entityId;
+                    this.forceDeleteEntityName = entityName;
+                    this.showForceDeleteModal = true;
+                },
+
+                getForceDeleteWarning() {
+                    const warnings = {
+                        'portfolio': 'This will delete ALL departments, subsidiaries, categories, KPIs, and scores associated with this portfolio.',
+                        'department': 'This will delete ALL subsidiaries, categories, KPIs, and scores associated with this department.',
+                        'subsidiary': 'This will delete ALL categories, KPIs, and scores associated with this subsidiary.',
+                        'category': 'This will delete ALL KPIs associated with this category.'
+                    };
+                    return warnings[this.forceDeleteEntityType] || 'This will delete all associated data.';
+                },
+
+                async deleteSingle() {
+                    try {
+                        const response = await fetch(`/api/${this.deleteEntityType}/${this.deleteEntityId}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            }
+                        });
+
+                        const result = await response.json();
+
+                        if (response.ok) {
+                            // Remove the row from the table
+                            const row = document.getElementById(`${this.deleteEntityType}-row-${this.deleteEntityId}`);
+                            if (row) row.remove();
+                            
+                            // Show success message
+                            alert(`${this.deleteEntityName} has been deleted successfully`);
+                            
+                            // Reload the page to refresh the data
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 1000);
+                            
+                        } else {
+                            alert(`Error: ${result.error}`);
+                        }
+                    } catch (error) {
+                        alert('Error deleting item: ' + error.message);
+                    } finally {
+                        this.showSingleDeleteModal = false;
+                    }
+                },
+
+                async forceDeleteSingle() {
+                    try {
+                        const response = await fetch(`/api/${this.forceDeleteEntityType}/${this.forceDeleteEntityId}/force`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            }
+                        });
+
+                        const result = await response.json();
+
+                        if (response.ok) {
+                            // Remove the row from the table
+                            const row = document.getElementById(`${this.forceDeleteEntityType}-row-${this.forceDeleteEntityId}`);
+                            if (row) row.remove();
+                            
+                            // Show success message
+                            alert(result.message || `${this.forceDeleteEntityName} and all associated data have been deleted successfully`);
+                            
+                            // Reload the page to refresh the data
+                            setTimeout(() => {
+                                window.location.reload();
+                            }, 1000);
+                            
+                        } else {
+                            alert(`Error: ${result.error}`);
+                        }
+                    } catch (error) {
+                        alert('Error force deleting item: ' + error.message);
+                    } finally {
+                        this.showForceDeleteModal = false;
+                    }
+                },
+
+                async deleteAll() {
+                    if (!this.entityToDelete || !confirm(`Are you absolutely sure you want to delete ALL ${this.entityToDelete} data? This cannot be undone!`)) {
+                        this.showDeleteAllModal = false;
+                        return;
+                    }
+                    
+                    try {
+                        // For now, we'll use individual deletion since we don't have a bulk delete endpoint
+                        // This would need backend implementation for bulk deletion
+                        alert(`Bulk deletion for ${this.entityToDelete} would be implemented here`);
+                    } catch (error) {
+                        alert('Error deleting data: ' + error.message);
+                    } finally {
+                        this.showDeleteAllModal = false;
+                        this.entityToDelete = '';
+                    }
+                }
+            }));
+        });
+    </script>
+</body>
+</html>
