@@ -86,7 +86,7 @@ def create_app(config_class=Config):
                 db.session.add(admin)
                 db.session.commit()
 
-                print("✅ AUTO ADMIN CREATED")
+                print("✅AUTO ADMIN CREATED")
 
         except Exception as e:
             print("❌ SEED ERROR:", str(e))
