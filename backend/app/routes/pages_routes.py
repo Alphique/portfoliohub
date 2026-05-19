@@ -1,7 +1,7 @@
 # app/routes/pages_routes.py
 from flask import Blueprint, render_template, session
 import logging
-from ..utils.navigation import get_navigation_data
+from app.utils.navigation import get_navigation_data
 
 pages_bp = Blueprint('pages', __name__)
 logger = logging.getLogger(__name__)
