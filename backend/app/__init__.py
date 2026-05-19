@@ -68,7 +68,7 @@ def create_app(config_class=Config):
         return render_template("errors/403.html"), 403
 
     # =========================
-    # AUTO ADMIN SEED (FIXED)
+    # AUTO ADMIN SEED (FIXED) 
     # =========================
     with app.app_context():
         try:
