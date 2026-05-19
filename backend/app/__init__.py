@@ -67,4 +67,25 @@ def create_app(config_class=Config):
     def forbidden_error(error):
         return render_template("errors/403.html"), 403
 
+    with app.app_context():
+    try:
+        from .models import AdminUser, db
+
+        # ONLY create if none exists
+        if not AdminUser.query.first():
+            admin = AdminUser(
+                username="admin",
+                email="admin@local.com",
+                role="admin",
+                is_active=True
+            )
+            admin.set_password("admin123")
+
+            db.session.add(admin)
+            db.session.commit()
+
+            print("✅ AUTO ADMIN CREATED")
+    except Exception as e:
+        print("❌ SEED ERROR:", e)
+
     return app
