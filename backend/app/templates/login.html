@@ -498,8 +498,8 @@
     <li>
       <a id="menu-toggle"><i class="fas fa-bars"></i> Menu</a>
       <ul class="dropdown" id="dropdown-menu">
-        <li><a href="{{ url_for('routes.about_us') }}"><i class="fas fa-info-circle"></i> About Us</a></li>
-        <li><a href="{{ url_for('routes.contact') }}"><i class="fas fa-envelope"></i> Contact</a></li>
+        <li><a href="{{ url_for('pages.about_us') }}"><i class="fas fa-info-circle"></i> About Us</a></li>
+        <li><a href="{{ url_for('pages.contact') }}"><i class="fas fa-envelope"></i> Contact</a></li>
        <!--     <li><a href="#"><i class="fas fa-question-circle"></i> Help</a></li>    --> 
       </ul>
     </li>
@@ -513,7 +513,7 @@
     Strategically transforming and monitoring public enterprises to ensure sustainability, 
     transparency, and national impact through data-driven oversight and performance management.
   </p>
-  <a href="{{ url_for('routes.about_us') }}" class="cta-button">
+  <a href="{{ url_for('pages.about_us') }}" class="cta-button">
     <i class="fas fa-chart-line"></i> Learn About Our Work
   </a>
 </div>
@@ -529,7 +529,7 @@
 <!-- Login Form -->
 <div class="login-container">
   <h2><i class="fas fa-lock"></i> Admin Login</h2>
-  <form method="POST" action="{{ url_for('routes.login') }}">
+  <form method="POST" action="{{ url_for('pages.login') }}">
     <div class="input-group">
       <i class="fas fa-user input-icon"></i>
       <input type="text" name="username" placeholder="Username" required />
