@@ -3,15 +3,18 @@ from flask import Flask, render_template, session
 from datetime import datetime
 from flask_migrate import Migrate
 from .config import Config
-from .models import db
 
 def create_app(config_class=Config):
     """Application factory for Portfolio PMC Hub."""
     app = Flask(__name__)
     app.config.from_object(config_class)
 
-    # Initialize extensions
+    # =========================
+    # INIT DB SAFELY (FIX HERE)
+    # =========================
+    from .models import db   # <-- moved INSIDE function
     db.init_app(app)
+
     migrate = Migrate(app, db)
 
     # Register blueprints
@@ -27,10 +30,9 @@ def create_app(config_class=Config):
     app.register_blueprint(user_bp, url_prefix='/user')
     app.register_blueprint(api_bp, url_prefix='/api')
 
-    # Context processors (available in all templates)
+    # Context processors
     @app.context_processor
     def inject_globals():
-        """Inject global variables into all templates."""
         try:
             from .models import Portfolio, Year
 
@@ -44,13 +46,11 @@ def create_app(config_class=Config):
             active_portfolios = []
             active_year = None
 
-        current_user = session.get('admin_user')
-
         return {
             "current_year": datetime.now().year,
             "active_portfolios": active_portfolios,
             "active_year": active_year,
-            "current_user": current_user
+            "current_user": session.get('admin_user')
         }
 
     # Error handlers
@@ -67,14 +67,13 @@ def create_app(config_class=Config):
     def forbidden_error(error):
         return render_template("errors/403.html"), 403
 
-    # ================================
-    # ✅ SAFE ADMIN AUTO-SEED (FIXED)
-    # ================================
+    # =========================
+    # AUTO ADMIN SEED (FIXED)
+    # =========================
     with app.app_context():
         try:
             from .models import AdminUser, db
 
-            # Only create if no admin exists
             if not AdminUser.query.first():
                 admin = AdminUser(
                     username="admin",
@@ -87,7 +86,7 @@ def create_app(config_class=Config):
                 db.session.add(admin)
                 db.session.commit()
 
-                print("✅ AUTO ADMIN CREATED: admin / admin123")
+                print("✅ AUTO ADMIN CREATED")
 
         except Exception as e:
             print("❌ SEED ERROR:", str(e))
