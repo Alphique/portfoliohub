@@ -1,5 +1,5 @@
 # app/__init__.py
-from flask import Flask, render_template
+from flask import Flask, render_template, session
 from datetime import datetime
 from flask_migrate import Migrate
 from .config import Config
@@ -20,7 +20,7 @@ def create_app(config_class=Config):
     from .routes.admin_routes import admin_bp
     from .routes.user_routes import user_bp
     from .routes.api_routes import api_bp
-    
+
     app.register_blueprint(auth_bp)
     app.register_blueprint(pages_bp)
     app.register_blueprint(admin_bp, url_prefix='/admin')
@@ -33,18 +33,19 @@ def create_app(config_class=Config):
         """Inject global variables into all templates."""
         try:
             from .models import Portfolio, Year
-            # Use simple queries that don't trigger relationship loading
-            active_portfolios = Portfolio.query.filter_by(is_active=True).order_by(Portfolio.display_order).all()
+
+            active_portfolios = Portfolio.query.filter_by(
+                is_active=True
+            ).order_by(Portfolio.display_order).all()
+
             active_year = Year.query.filter_by(is_active=True).first()
-        except Exception as e:
-            # If tables don't exist yet or other error, return defaults
+
+        except Exception:
             active_portfolios = []
             active_year = None
-        
-        # Get current user from session if available
-        from flask import session
-        current_user = session.get('admin_user') if 'admin_user' in session else None
-        
+
+        current_user = session.get('admin_user')
+
         return {
             "current_year": datetime.now().year,
             "active_portfolios": active_portfolios,
@@ -55,7 +56,6 @@ def create_app(config_class=Config):
     # Error handlers
     @app.errorhandler(404)
     def not_found_error(error):
-        # Use simple template rendering without navigation data
         return render_template("errors/404.html"), 404
 
     @app.errorhandler(500)
@@ -67,25 +67,29 @@ def create_app(config_class=Config):
     def forbidden_error(error):
         return render_template("errors/403.html"), 403
 
+    # ================================
+    # ✅ SAFE ADMIN AUTO-SEED (FIXED)
+    # ================================
     with app.app_context():
-    try:
-        from .models import AdminUser, db
+        try:
+            from .models import AdminUser, db
 
-        # ONLY create if none exists
-        if not AdminUser.query.first():
-            admin = AdminUser(
-                username="admin",
-                email="admin@local.com",
-                role="admin",
-                is_active=True
-            )
-            admin.set_password("admin123")
+            # Only create if no admin exists
+            if not AdminUser.query.first():
+                admin = AdminUser(
+                    username="admin",
+                    email="admin@local.com",
+                    role="admin",
+                    is_active=True
+                )
+                admin.set_password("admin123")
 
-            db.session.add(admin)
-            db.session.commit()
+                db.session.add(admin)
+                db.session.commit()
 
-            print("✅ AUTO ADMIN CREATED")
-    except Exception as e:
-        print("❌ SEED ERROR:", e)
+                print("✅ AUTO ADMIN CREATED: admin / admin123")
+
+        except Exception as e:
+            print("❌ SEED ERROR:", str(e))
 
     return app
