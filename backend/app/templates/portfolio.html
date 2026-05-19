@@ -163,7 +163,7 @@
         <div class="row g-4">
             {% for portfolio in portfolios %}
             <div class="col-lg-4 col-md-6">
-                <form method="POST" action="{{ url_for('routes.portfolio') }}" class="h-100">
+                <form method="POST" action="{{ url_for('user.portfolio') }}" class="h-100">
                     <div class="portfolio-card portfolio-{{ loop.index }}">
                         <div class="card-icon">
                             <i class="bi bi-{% if loop.index == 1 %}gem{% elif loop.index == 2 %}factory{% else %}building{% endif %}"></i>
