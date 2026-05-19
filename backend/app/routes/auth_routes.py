@@ -86,3 +86,25 @@ def logout():
         logger.error(f"Logout error: {str(e)}")
         flash('Error during logout.', 'danger')
         return redirect(url_for('auth.login'))
+
+#sample admin
+@auth_bp.route('/create-admin')
+def create_admin():
+    from ..models import AdminUser, db
+
+    # prevent duplicate creation
+    if AdminUser.query.filter_by(username="admin").first():
+        return "Admin already exists."
+
+    admin = AdminUser(
+        username="admin",
+        email="admin@local.com",
+        role="admin",
+        is_active=True
+    )
+    admin.set_password("admin123")
+
+    db.session.add(admin)
+    db.session.commit()
+
+    return "Admin created: username=admin password=admin123"
