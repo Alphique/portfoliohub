@@ -108,3 +108,4 @@ def create_admin():
     db.session.commit()
 
     return "Admin created: username=admin password=admin123"
+    return "HIT"
