@@ -10,11 +10,14 @@ def get_navigation_data():
     return {}
 
 
+# @pages_bp.route('/about_us')
+# def about_us():
+   # return render_template('about_us.html', **get_navigation_data())
+
 @pages_bp.route('/about_us')
 def about_us():
-    return render_template('about_us.html', **get_navigation_data())
-
-
+    return "ABOUT WORKS"
+    
 @pages_bp.route('/contact')
 def contact():
     return render_template('contact.html', **get_navigation_data())
