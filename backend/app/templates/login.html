@@ -529,7 +529,7 @@
 <!-- Login Form -->
 <div class="login-container">
   <h2><i class="fas fa-lock"></i> Admin Login</h2>
-  <form method="POST" action="{{ url_for('pages.login') }}">
+  <form method="POST" action="{{ url_for('auth.login') }}">
     <div class="input-group">
       <i class="fas fa-user input-icon"></i>
       <input type="text" name="username" placeholder="Username" required />
