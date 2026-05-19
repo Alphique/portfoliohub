@@ -257,7 +257,7 @@
                     <span class="flag-segment"></span>
                     <span class="flag-segment"></span>
                 </div>
-                <a class="navbar-brand floating" href="{{ url_for('routes.login') }}">
+                <a class="navbar-brand floating" href="{{ url_for('auth.login') }}">
                     PMC Hub
                 </a>
             </div>
@@ -269,25 +269,25 @@
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item">
                         <a class="nav-link {% if request.endpoint == 'routes.login' or request.endpoint == 'routes.index' %}active{% endif %}" 
-                            href="{{ url_for('routes.login') }}">
+                            href="{{ url_for('auth.login') }}">
                             <i class="fas fa-home"></i>Home
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if request.endpoint == 'routes.dashboard' %}active{% endif %}" 
-                            href="{{ url_for('routes.dashboard') }}">
+                            href="{{ url_for('user.dashboard') }}">
                             <i class="fas fa-tachometer-alt"></i>Dashboard
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if request.endpoint == 'routes.about_us' %}active{% endif %}" 
-                            href="{{ url_for('routes.about_us') }}">
+                            href="{{ url_for('pages.about_us') }}">
                             <i class="fas fa-info-circle"></i>About
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if request.endpoint == 'routes.contact' %}active{% endif %}" 
-                            href="{{ url_for('routes.contact') }}">
+                            href="{{ url_for('pages.contact') }}">
                             <i class="fas fa-envelope"></i>Contact
                         </a>
                     </li>
@@ -301,12 +301,12 @@
                             <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2 text-orange"></i>Settings</a></li>
                             <li><a class="dropdown-item" href="#"><i class="fas fa-question-circle me-2 text-orange"></i>Help</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="{{ url_for('routes.logout') }}"><i class="fas fa-sign-out-alt me-2 text-red"></i>Logout</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out-alt me-2 text-red"></i>Logout</a></li>
                         </ul>
                     </li>
                     {% else %}
                     <li class="nav-item">
-                        <a class="nav-link {% if request.endpoint == 'routes.login' %}active{% endif %}" href="{{ url_for('routes.login') }}">
+                        <a class="nav-link {% if request.endpoint == 'routes.login' %}active{% endif %}" href="{{ url_for('auth.login') }}">
                             <i class="fas fa-sign-in-alt me-2"></i>Login
                         </a>
                     </li>
@@ -351,10 +351,10 @@
                             <h3 class="mb-3 fw-bold text-dark-bg">Empowering Data-Driven Decisions</h3>
                             <p class="text-muted lead px-4">Utilize the Portfolio Management Console for comprehensive monitoring and strategic oversight of subsidiary performance and vital data across the nation.</p>
                             <div class="mt-5">
-                                <a href="{{ url_for('routes.login') }}" class="btn btn-primary btn-lg me-3">
+                                <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-lg me-3">
                                     <i class="fas fa-lock me-2"></i>Secure Login
                                 </a>
-                                <a href="{{ url_for('routes.about_us') }}" class="btn btn-outline-primary btn-lg">
+                                <a href="{{ url_for('pages.about_us') }}" class="btn btn-outline-primary btn-lg">
                                     <i class="fas fa-info-circle me-2"></i>System Overview
                                 </a>
                             </div>
@@ -403,14 +403,14 @@
                     <div class="row">
                         <div class="col-6">
                             <ul class="list-unstyled">
-                                <li class="mb-3"><a href="{{ url_for('routes.login') }}" class="text-light text-decoration-none"><i class="fas fa-home me-2 text-orange"></i>Home</a></li>
-                                <li class="mb-3"><a href="{{ url_for('routes.dashboard') }}" class="text-light text-decoration-none"><i class="fas fa-tachometer-alt me-2 text-orange"></i>Dashboard</a></li>
-                                <li class="mb-3"><a href="{{ url_for('routes.about_us') }}" class="text-light text-decoration-none"><i class="fas fa-info-circle me-2 text-orange"></i>About Us</a></li>
+                                <li class="mb-3"><a href="{{ url_for('auth.login') }}" class="text-light text-decoration-none"><i class="fas fa-home me-2 text-orange"></i>Home</a></li>
+                                <li class="mb-3"><a href="{{ url_for('user.dashboard') }}" class="text-light text-decoration-none"><i class="fas fa-tachometer-alt me-2 text-orange"></i>Dashboard</a></li>
+                                <li class="mb-3"><a href="{{ url_for('pages.about_us') }}" class="text-light text-decoration-none"><i class="fas fa-info-circle me-2 text-orange"></i>About Us</a></li>
                             </ul>
                         </div>
                         <div class="col-6">
                             <ul class="list-unstyled">
-                                <li class="mb-3"><a href="{{ url_for('routes.contact') }}" class="text-light text-decoration-none"><i class="fas fa-envelope me-2 text-orange"></i>Contact</a></li>
+                                <li class="mb-3"><a href="{{ url_for('pages.contact') }}" class="text-light text-decoration-none"><i class="fas fa-envelope me-2 text-orange"></i>Contact</a></li>
                                 <li class="mb-3"><a href="#" class="text-light text-decoration-none"><i class="fas fa-question-circle me-2 text-orange"></i>Help Center</a></li>
                                 <li class="mb-3"><a href="#" class="text-light text-decoration-none"><i class="fas fa-shield-alt me-2 text-orange"></i>Terms & Policy</a></li>
                             </ul>
